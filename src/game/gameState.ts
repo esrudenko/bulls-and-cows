@@ -31,3 +31,10 @@ export const startGame = (
     finishedAt: null,
   };
 };
+
+export const submitGuess = (state: GameState, guess: string, now: number): GameState => {
+  void guess;
+  void now;
+
+  return state;
+};
