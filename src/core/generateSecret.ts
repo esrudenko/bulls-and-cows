@@ -4,18 +4,18 @@ export const generateSecret = (
   random: () => number = Math.random,
 ): string => {
   const digits = '0123456789ABCDEF';
-  let availableDigits = [...digits.slice(0, base)];
 
-  const secret = Array.from({ length })
-    .map(() => {
-      const randomIndex = Math.floor(random() * availableDigits.length);
-      const selectedDigit = availableDigits[randomIndex];
+  const pickDigits = (availableDigits: string[], count: number): string => {
+    if (count === 0) {
+      return '';
+    }
 
-      availableDigits = availableDigits.filter((digit) => digit !== selectedDigit);
+    const randomIndex = Math.floor(random() * availableDigits.length);
+    const selectedDigit = availableDigits[randomIndex];
+    const remainingDigits = availableDigits.filter((digit) => digit !== selectedDigit);
 
-      return selectedDigit;
-    })
-    .join('');
+    return selectedDigit + pickDigits(remainingDigits, count - 1);
+  };
 
-  return secret;
+  return pickDigits([...digits.slice(0, base)], length);
 };
