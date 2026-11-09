@@ -1,4 +1,6 @@
 import type { GameState } from './gameTypes';
+import type { GameBase } from './gameTypes';
+import type { GameLength } from './gameTypes';
 
 export const createInitialState = (): GameState => {
   return {
@@ -10,4 +12,17 @@ export const createInitialState = (): GameState => {
     startedAt: null,
     finishedAt: null,
   };
+};
+
+export const startGame = (
+  state: GameState,
+  random: () => number,
+  now: number,
+  settings: { base: GameBase; length: GameLength },
+): GameState => {
+  void random;
+  void now;
+  void settings;
+
+  return state;
 };
