@@ -1,6 +1,5 @@
-import type { GameState } from './gameTypes';
-import type { GameBase } from './gameTypes';
-import type { GameLength } from './gameTypes';
+import { generateSecret } from '../core/generateSecret';
+import type { GameState, GameBase, GameLength } from './gameTypes';
 
 export const createInitialState = (): GameState => {
   return {
@@ -20,9 +19,15 @@ export const startGame = (
   now: number,
   settings: { base: GameBase; length: GameLength },
 ): GameState => {
-  void random;
-  void now;
-  void settings;
-
-  return state;
+  const secret = generateSecret(settings.length, settings.base, random);
+  return {
+    ...state,
+    secret,
+    attempts: [],
+    status: 'playing',
+    base: settings.base,
+    length: settings.length,
+    startedAt: now,
+    finishedAt: null,
+  };
 };
