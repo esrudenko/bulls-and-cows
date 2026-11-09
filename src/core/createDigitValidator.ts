@@ -1,6 +1,7 @@
+import { DIGITS } from './constants';
+
 export const createDigitValidator = (base: number): ((digit: string) => boolean) => {
-  const digits = '0123456789ABCDEF';
-  const allowedDigits = digits.slice(0, base);
+  const allowedDigits = DIGITS.slice(0, base);
 
   return (digit: string): boolean => {
     const digitToCheck = digit.toUpperCase();

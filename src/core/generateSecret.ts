@@ -1,10 +1,10 @@
+import { DIGITS } from './constants';
+
 export const generateSecret = (
   length: number,
   base: number,
   random: () => number = Math.random,
 ): string => {
-  const digits = '0123456789ABCDEF';
-
   const pickDigits = (availableDigits: string[], count: number): string => {
     if (count === 0) {
       return '';
@@ -17,5 +17,5 @@ export const generateSecret = (
     return selectedDigit + pickDigits(remainingDigits, count - 1);
   };
 
-  return pickDigits([...digits.slice(0, base)], length);
+  return pickDigits([...DIGITS.slice(0, base)], length);
 };
