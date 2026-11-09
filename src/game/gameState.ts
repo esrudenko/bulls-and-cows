@@ -4,7 +4,7 @@ export const createInitialState = (): GameState => {
   return {
     secret: '',
     attempts: [],
-    status: 'won',
+    status: 'idle',
     base: 10,
     length: 4,
     startedAt: null,
