@@ -15,4 +15,7 @@ describe('isValidSettings', () => {
     expect(isValidSettings(10, 1)).toBe(false);
     expect(isValidSettings(10, 7)).toBe(false);
   });
+  it('rejects unsupported bases', () => {
+    expect(isValidSettings(3, 4)).toBe(false);
+  });
 });

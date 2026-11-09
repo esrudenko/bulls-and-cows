@@ -1,6 +1,9 @@
 export const isValidSettings = (base: number, length: number): boolean => {
-  void base;
-  void length;
+  const isValidLength = length >= 2 && length <= 6;
+  const isValidBinaryLength = base !== 2 || length === 2;
 
-  return false;
+  const allowedBases = [2, 8, 10, 16];
+  const isValidBase = allowedBases.includes(base);
+
+  return isValidLength && isValidBinaryLength && isValidBase;
 };
