@@ -1,3 +1,4 @@
+import './styles/main.css';
 import { createElement } from './ui/createElement';
 
 const header = createElement('header', { className: 'header' });
