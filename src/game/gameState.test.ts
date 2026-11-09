@@ -104,4 +104,13 @@ describe('submitGuess', () => {
     expect(newState.status).toBe('won');
     expect(newState.finishedAt).toBe(5000);
   });
+  it('does not count duplicate hexadecimal guesses with different case', () => {
+    const playingState = startGame(createInitialState(), () => 0, 1000, {
+      base: 16,
+      length: 4,
+    });
+    const state1 = submitGuess(playingState, 'AB12', 2000);
+    const state2 = submitGuess(state1, 'ab12', 3000);
+    expect(state2.attempts.length).toBe(1);
+  });
 });
