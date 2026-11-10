@@ -30,11 +30,20 @@
   box-shadow: var(--shadow-button);
   pointer-events: auto;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
-.header__button:hover {
+@media (hover: hover) {
+  .header__button:hover {
+    background-color: var(--color-hover);
+  }
+}
+
+.header__button:active {
   background-color: var(--color-hover);
+  transform: scale(0.94);
 }
 
 .header__button:focus-visible {

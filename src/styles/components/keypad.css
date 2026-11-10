@@ -53,11 +53,20 @@
   font: inherit;
   font-size: clamp(1.1875rem, calc(var(--key-height) * 0.46), 1.5rem);
   font-weight: 700;
-  transition: background-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
-.keypad__key:hover {
+@media (hover: hover) {
+  .keypad__key:hover:not(:disabled) {
+    background-color: var(--color-hover);
+  }
+}
+
+.keypad__key:active:not(:disabled) {
   background-color: var(--color-hover);
+  transform: scale(0.94);
 }
 
 .keypad__key:focus-visible {
@@ -97,7 +106,9 @@
   height: var(--action-height);
   border-radius: 999px;
   font: inherit;
-  transition: background-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .actions__delete {
@@ -108,8 +119,15 @@
   box-shadow: var(--shadow-button);
 }
 
-.actions__delete:hover {
+@media (hover: hover) {
+  .actions__delete:hover:not(:disabled) {
+    background-color: var(--color-hover);
+  }
+}
+
+.actions__delete:active:not(:disabled) {
   background-color: var(--color-hover);
+  transform: scale(0.97);
 }
 
 .actions__icon {
@@ -126,8 +144,15 @@
   font-weight: 800;
 }
 
-.actions__check:hover {
+@media (hover: hover) {
+  .actions__check:hover:not(:disabled) {
+    background-color: var(--color-accent-dark);
+  }
+}
+
+.actions__check:active:not(:disabled) {
   background-color: var(--color-accent-dark);
+  transform: scale(0.97);
 }
 
 .actions__delete:focus-visible,

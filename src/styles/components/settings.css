@@ -30,22 +30,29 @@
 }
 
 .settings__select {
-  padding: 0 16px;
+  padding: 0 12px;
   background-image: url('../../assets/icons/chevron-down.svg');
   background-position: right 5px center;
   background-size: 12px;
   background-repeat: no-repeat;
   color: var(--color-text);
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 700;
   text-align: center;
+  white-space: nowrap;
   appearance: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
-.settings__select:hover {
+@media (hover: hover) {
+  .settings__select:hover:not(:disabled) {
+    background-color: var(--color-hover);
+  }
+}
+
+.settings__select:active:not(:disabled) {
   background-color: var(--color-hover);
 }
 
@@ -89,11 +96,20 @@
   border-radius: 50%;
   background-color: var(--color-accent);
   box-shadow: var(--shadow-button);
-  transition: background-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 }
 
-.settings__start:hover {
+@media (hover: hover) {
+  .settings__start:hover:not(:disabled) {
+    background-color: var(--color-accent-dark);
+  }
+}
+
+.settings__start:active:not(:disabled) {
   background-color: var(--color-accent-dark);
+  transform: scale(0.92);
 }
 
 .settings__start:focus-visible {
@@ -143,11 +159,17 @@
     font-weight: 700;
   }
 
-  .settings__select option:hover,
   .settings__select option:focus-visible,
+  .settings__select option:active,
   .settings__select option:checked {
     background-color: var(--color-hover);
     outline: none;
+  }
+
+  @media (hover: hover) {
+    .settings__select option:hover {
+      background-color: var(--color-hover);
+    }
   }
 
   .settings__select option:disabled {
