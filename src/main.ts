@@ -14,9 +14,15 @@ const settings = createSettings();
 const actions = createActions();
 const history = createHistory();
 
+const START_HINT = 'Press ▶ to start';
+
 const hint = createElement('p', { className: 'play__hint' });
 const guessSlot = createElement('div');
 const keypadSlot = createElement('div');
+const play = createElement('div', {
+  className: 'play',
+  children: [hint, guessSlot, keypadSlot, actions.element],
+});
 
 const getLength = (): number => Number(settings.lengthSelect.value);
 const getBase = (): number => Number(settings.baseSelect.value);
@@ -41,6 +47,14 @@ const updateInputView = (): void => {
 
   actions.deleteButton.disabled = !isPlaying() || input === '';
   actions.checkButton.disabled = !isPlaying() || input.length < getLength();
+  play.classList.toggle('play--idle', game.status === 'idle');
+};
+
+const showHistory = (): void => {
+  const isIdle = game.status === 'idle';
+
+  renderHistory(history, game.attempts, isIdle ? START_HINT : undefined);
+  history.element.classList.toggle('history--idle', isIdle);
 };
 
 const setInput = (nextInput: string): void => {
@@ -63,7 +77,7 @@ const stopTimer = (): void => {
 const startRound = (): void => {
   game = startGame(game, Math.random, Date.now(), readSettings(settings));
   setSettingsLocked(settings, true);
-  renderHistory(history, game.attempts);
+  showHistory();
   setInput('');
   updateTimer();
   timerId = window.setInterval(updateTimer, 250);
@@ -90,7 +104,7 @@ const checkGuess = (): void => {
   }
 
   game = nextGame;
-  renderHistory(history, game.attempts);
+  showHistory();
   setInput('');
 
   if (game.status === 'won') {
@@ -156,13 +170,8 @@ document.addEventListener('keydown', (event) => {
 
 guessSlot.replaceChildren(guessCells.element);
 keypadSlot.replaceChildren(keypad.element);
-renderHistory(history, game.attempts);
-updateInputView();
-
-const play = createElement('div', {
-  className: 'play',
-  children: [hint, guessSlot, keypadSlot, actions.element],
-});
+showHistory();
+setInput('');
 
 const main = createElement('main', {
   className: 'card',

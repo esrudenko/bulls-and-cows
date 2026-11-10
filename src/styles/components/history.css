@@ -70,3 +70,14 @@
   line-height: 1.2;
   text-align: center;
 }
+
+/* Before the round starts the keypad looks normal, the hint explains why it does not react */
+.play--idle .keypad__key:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.history--idle .history__placeholder {
+  color: var(--color-accent-dark);
+  font-weight: 700;
+}

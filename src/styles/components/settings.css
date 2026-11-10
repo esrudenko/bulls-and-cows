@@ -192,3 +192,25 @@
     grid-column: 1 / -1;
   }
 }
+
+/* The start button gently pulses until the round starts */
+.settings__start:not(:disabled) {
+  animation: start-pulse 1.8s ease-out infinite;
+}
+
+@keyframes start-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(63, 143, 63, 0.45);
+  }
+
+  70%,
+  100% {
+    box-shadow: 0 0 0 8px rgba(63, 143, 63, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings__start:not(:disabled) {
+    animation: none;
+  }
+}

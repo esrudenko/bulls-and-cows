@@ -32,14 +32,15 @@ export const createHistory = (): History => {
   return { element, list };
 };
 
-export const renderHistory = (history: History, attempts: readonly Guess[]): void => {
+export const renderHistory = (
+  history: History,
+  attempts: readonly Guess[],
+  emptyText = 'Your guesses will appear here',
+): void => {
   const rows = attempts.map((attempt, index) =>
     createHistoryRow(attempt, index === attempts.length - 1),
   );
-  const placeholder = createElement('li', {
-    className: 'history__placeholder',
-    text: 'Your guesses will appear here',
-  });
+  const placeholder = createElement('li', { className: 'history__placeholder', text: emptyText });
 
   history.list.replaceChildren(...(rows.length > 0 ? rows : [placeholder]));
   history.element.scrollTop = history.element.scrollHeight;
