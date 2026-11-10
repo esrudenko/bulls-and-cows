@@ -2,9 +2,16 @@
 .app {
   --app-height: 100dvh;
 
+  /* Sizes grow with the screen height, between a compact and a comfortable value */
+  --control-height: clamp(44px, calc(var(--app-height) * 0.055), 54px);
+  --history-row-height: clamp(36px, calc(var(--app-height) * 0.045), 46px);
+  --cell-height: clamp(48px, calc(var(--app-height) * 0.068), 62px);
+  --key-height: clamp(38px, calc(var(--app-height) * 0.058), 56px);
+  --action-height: clamp(44px, calc(var(--app-height) * 0.062), 58px);
+
   display: flex;
   flex-direction: column;
-  max-width: 420px;
+  max-width: 480px;
   height: var(--app-height);
   margin: 0 auto;
   background: url('../../assets/images/main-background.webp') center / cover no-repeat;
@@ -18,10 +25,12 @@
   min-height: 12px;
 }
 
-@media (min-width: 480px) {
+/* Framed "phone" look only on wide screens with a mouse, never on phones */
+@media (min-width: 480px) and (hover: hover) and (pointer: fine) {
   .app {
     --app-height: calc(100dvh - 48px);
 
+    max-width: 420px;
     margin: 24px auto;
     border-radius: 32px;
     box-shadow: var(--shadow-card);
@@ -31,6 +40,10 @@
 
 @media (max-height: 600px) {
   .app {
+    --cell-height: 42px;
+    --key-height: 34px;
+    --action-height: 40px;
+
     padding-bottom: 8px;
   }
 }

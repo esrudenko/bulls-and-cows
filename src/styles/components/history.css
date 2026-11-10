@@ -1,7 +1,5 @@
 /* History: shows the last three guesses, older ones scroll */
 .history {
-  --history-row-height: 36px;
-
   flex: none;
   height: calc(var(--history-row-height) * 3 + 2px);
   overflow-y: auto;
