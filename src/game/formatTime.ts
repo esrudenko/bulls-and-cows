@@ -1,4 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+const padTwoDigits = (value: number): string => String(value).padStart(2, '0');
+
 export const formatTime = (milliseconds: number): string => {
-  return '';
+  const totalSeconds = Math.floor(Math.max(milliseconds, 0) / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${padTwoDigits(minutes)}:${padTwoDigits(seconds)}`;
 };
