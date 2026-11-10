@@ -7,7 +7,8 @@ type History = {
   list: HTMLOListElement;
 };
 
-const createHistoryRow = (attempt: Guess, isLatest: boolean): HTMLLIElement => {
+const createHistoryRow = (attempt: Guess, number: number, isLatest: boolean): HTMLLIElement => {
+  const attemptNumber = createElement('span', { className: 'history__number', text: `${number}.` });
   const guess = createElement('span', { className: 'history__guess', text: attempt.value });
   const result = createElement('span', {
     className: 'history__result',
@@ -16,7 +17,7 @@ const createHistoryRow = (attempt: Guess, isLatest: boolean): HTMLLIElement => {
 
   return createElement('li', {
     className: isLatest ? 'history__row history__row--latest' : 'history__row',
-    children: [guess, result],
+    children: [attemptNumber, guess, result],
   });
 };
 
@@ -38,7 +39,7 @@ export const renderHistory = (
   emptyText = 'Your guesses will appear here',
 ): void => {
   const rows = attempts.map((attempt, index) =>
-    createHistoryRow(attempt, index === attempts.length - 1),
+    createHistoryRow(attempt, index + 1, index === attempts.length - 1),
   );
   const placeholder = createElement('li', { className: 'history__placeholder', text: emptyText });
 
