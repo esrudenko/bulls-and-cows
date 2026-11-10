@@ -5,16 +5,22 @@ import { createSettings, readSettings, setSettingsLocked } from './ui/settings';
 import { createGuessCells } from './ui/guess';
 import { createActions, createKeypad } from './ui/keypad';
 import { createHistory, renderHistory } from './ui/history';
+import { createWinDialog } from './ui/winDialog';
 import { appendDigit, removeLastDigit } from './game/guessInput';
 import { createInitialState, startGame, submitGuess } from './game/gameState';
 import { formatTime } from './game/formatTime';
+import { addRecord } from './game/records';
+import { loadRecords, saveRecords } from './storage/recordsStorage';
+import type { GameRecord } from './game/gameTypes';
 
 const header = createHeader();
 const settings = createSettings();
 const actions = createActions();
 const history = createHistory();
+const winDialog = createWinDialog();
 
 const START_HINT = 'Press ▶ to start';
+const RECORDS_LIMIT = 10;
 
 const hint = createElement('p', { className: 'play__hint' });
 const guessSlot = createElement('div');
@@ -74,6 +80,28 @@ const stopTimer = (): void => {
   updateTimer();
 };
 
+const getRoundTime = (): number => (game.finishedAt ?? 0) - (game.startedAt ?? 0);
+
+const hasSameSettings = (record: GameRecord): boolean =>
+  record.base === game.base && record.length === game.length;
+
+const saveResult = (): number | null => {
+  const record: GameRecord = {
+    attempts: game.attempts.length,
+    time: getRoundTime(),
+    base: game.base,
+    length: game.length,
+  };
+  const allRecords = loadRecords();
+  const otherTables = allRecords.filter((saved) => !hasSameSettings(saved));
+  const table = addRecord(allRecords.filter(hasSameSettings), record, RECORDS_LIMIT);
+  const index = table.indexOf(record);
+
+  saveRecords([...otherTables, ...table]);
+
+  return index === -1 ? null : index + 1;
+};
+
 const startRound = (): void => {
   game = startGame(game, Math.random, Date.now(), readSettings(settings));
   setSettingsLocked(settings, true);
@@ -81,6 +109,15 @@ const startRound = (): void => {
   setInput('');
   updateTimer();
   timerId = window.setInterval(updateTimer, 250);
+};
+
+const newGame = (): void => {
+  window.clearInterval(timerId);
+  game = createInitialState();
+  setSettingsLocked(settings, false);
+  settings.timeValue.textContent = formatTime(0);
+  showHistory();
+  setInput('');
 };
 
 const addDigit = (digit: string): void => {
@@ -109,6 +146,12 @@ const checkGuess = (): void => {
 
   if (game.status === 'won') {
     stopTimer();
+    winDialog.show({
+      secret: game.secret,
+      attempts: game.attempts.length,
+      time: getRoundTime(),
+      place: saveResult(),
+    });
   }
 };
 
@@ -148,6 +191,8 @@ keypadSlot.addEventListener('click', (event) => {
 actions.deleteButton.addEventListener('click', deleteDigit);
 actions.checkButton.addEventListener('click', checkGuess);
 settings.startButton.addEventListener('click', startRound);
+header.newGameButton.addEventListener('click', newGame);
+winDialog.newGameButton.addEventListener('click', newGame);
 
 document.addEventListener('keydown', (event) => {
   const isTypingInSelect = event.target instanceof HTMLSelectElement;
@@ -179,4 +224,4 @@ const main = createElement('main', {
 });
 const app = createElement('div', { className: 'app', children: [header.element, main] });
 
-document.body.append(app);
+document.body.append(app, winDialog.element);
