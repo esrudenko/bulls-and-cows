@@ -1,0 +1,166 @@
+/* Settings */
+.settings {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.settings__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.settings__label {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.settings__control {
+  width: 100%;
+  height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-button);
+}
+
+.settings__select {
+  padding: 0 16px;
+  background-image: url('../../assets/icons/chevron-down.svg');
+  background-position: right 5px center;
+  background-size: 12px;
+  background-repeat: no-repeat;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-align: center;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.settings__select:hover {
+  background-color: var(--color-hover);
+}
+
+.settings__select:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.settings__select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.settings__timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 4px;
+  transition: background-color 0.2s ease;
+}
+
+.settings__timer--active {
+  background-color: var(--color-hover);
+}
+
+.settings__time-value {
+  font-size: 1rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.settings__start {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  box-shadow: var(--shadow-button);
+  transition: background-color 0.2s ease;
+}
+
+.settings__start:hover {
+  background-color: var(--color-accent-dark);
+}
+
+.settings__start:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.settings__start:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.settings__start-icon {
+  width: 14px;
+  height: 14px;
+}
+
+@supports (appearance: base-select) {
+  .settings__select,
+  .settings__select::picker(select) {
+    appearance: base-select;
+  }
+
+  .settings__select {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .settings__select::picker-icon {
+    display: none;
+  }
+
+  .settings__select::picker(select) {
+    margin-top: 4px;
+    padding: 4px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-button);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .settings__select option {
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 10px;
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .settings__select option:hover,
+  .settings__select option:focus-visible,
+  .settings__select option:checked {
+    background-color: var(--color-hover);
+    outline: none;
+  }
+
+  .settings__select option::checkmark {
+    display: none;
+  }
+}
+
+@media (max-width: 359px) {
+  .settings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .settings__field--timer {
+    grid-column: 1 / -1;
+  }
+}

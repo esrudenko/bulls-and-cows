@@ -1,0 +1,85 @@
+import { createElement } from './createElement';
+import { DIGITS } from '../core/constants';
+import type { GameBase, GameLength } from '../game/gameTypes';
+import playIconUrl from '../assets/icons/play.svg';
+
+type Settings = {
+  element: HTMLElement;
+  lengthSelect: HTMLElement;
+  baseSelect: HTMLElement;
+  timerBox: HTMLElement;
+  timeValue: HTMLElement;
+  startButton: HTMLElement;
+};
+
+const LENGTHS: readonly GameLength[] = [2, 3, 4, 5, 6];
+const BASES: readonly GameBase[] = [2, 8, 10, 16];
+const DEFAULT_LENGTH: GameLength = 4;
+const DEFAULT_BASE: GameBase = 10;
+
+const createOption = (value: number, text: string, isSelected: boolean): HTMLElement => {
+  const attributes: Record<string, string> = { value: String(value) };
+
+  if (isSelected) {
+    attributes.selected = '';
+  }
+
+  return createElement('option', { text, attributes });
+};
+
+const formatBaseLabel = (base: GameBase): string => `${base} (0–${DIGITS[base - 1]})`;
+
+const createSelectField = (labelText: string, select: HTMLElement): HTMLElement => {
+  const label = createElement('span', { className: 'settings__label', text: labelText });
+
+  return createElement('label', { className: 'settings__field', children: [label, select] });
+};
+
+export const createSettings = (): Settings => {
+  const lengthSelect = createElement('select', {
+    className: 'settings__control settings__select',
+    children: LENGTHS.map((length) =>
+      createOption(length, String(length), length === DEFAULT_LENGTH),
+    ),
+  });
+
+  const baseSelect = createElement('select', {
+    className: 'settings__control settings__select',
+    children: BASES.map((base) => createOption(base, formatBaseLabel(base), base === DEFAULT_BASE)),
+  });
+
+  const timeLabel = createElement('span', { className: 'settings__label', text: 'Time' });
+  const timeValue = createElement('span', { className: 'settings__time-value', text: '00:00' });
+
+  const playIcon = createElement('img', {
+    className: 'settings__start-icon',
+    attributes: { src: playIconUrl, alt: '' },
+  });
+
+  const startButton = createElement('button', {
+    className: 'settings__start',
+    attributes: { type: 'button', title: 'Start game', 'aria-label': 'Start game' },
+    children: [playIcon],
+  });
+
+  const timerBox = createElement('div', {
+    className: 'settings__control settings__timer',
+    children: [timeValue, startButton],
+  });
+
+  const timer = createElement('div', {
+    className: 'settings__field settings__field--timer',
+    children: [timeLabel, timerBox],
+  });
+
+  const element = createElement('section', {
+    className: 'settings',
+    children: [
+      createSelectField('Length', lengthSelect),
+      createSelectField('Base', baseSelect),
+      timer,
+    ],
+  });
+
+  return { element, lengthSelect, baseSelect, timerBox, timeValue, startButton };
+};

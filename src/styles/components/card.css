@@ -4,6 +4,6 @@
   margin: 96px 16px 0;
   padding: 16px;
   border-radius: var(--radius-card);
-  background-color: var(--color-card);
+  background: linear-gradient(var(--color-card-top), var(--color-card) 160px);
   box-shadow: var(--shadow-card);
 }

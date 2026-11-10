@@ -2,8 +2,9 @@
   /* Colors */
   --color-page: #f3e9e1;
   --color-text: #303d36;
-  --color-text-muted: #6b5d55;
+  --color-text-muted: #5c6b63;
   --color-card: rgba(255, 248, 241, 0.7);
+  --color-card-top: rgba(255, 248, 241, 0.94);
   --color-surface: #fbf3ea;
   --color-border: #e5d6c8;
   --color-border-strong: #b5a497;
