@@ -1,0 +1,20 @@
+/* App container */
+.app {
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding-bottom: 80px;
+  background: url('../../assets/images/main-background.webp') center / cover no-repeat;
+}
+
+@media (min-width: 480px) {
+  .app {
+    min-height: calc(100dvh - 48px);
+    margin: 24px auto;
+    border-radius: 32px;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+}

@@ -3,33 +3,38 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 64px 24px 24px;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px 24px 0;
 }
 
 .header__actions {
   position: absolute;
-  top: 16px;
+  top: 23px;
   right: 16px;
+  left: 16px;
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  pointer-events: none;
 }
 
 .header__button {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   padding: 0;
-  border: 1.5px solid var(--color-text);
+  border: 1.5px solid var(--color-border-strong);
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-button);
+  pointer-events: auto;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .header__button:hover {
-  background-color: var(--color-surface);
+  background-color: var(--color-hover);
 }
 
 .header__button:focus-visible {
@@ -38,19 +43,19 @@
 }
 
 .header__icon {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
 }
 
 .header__logo {
   flex-shrink: 0;
-  width: 88px;
+  width: 54px;
   height: auto;
 }
 
 .header__title {
   color: var(--color-text);
-  font-size: clamp(2rem, 9vw, 2.75rem);
+  font-size: 1.6rem;
   font-weight: 800;
   line-height: 1.05;
   white-space: pre-line;

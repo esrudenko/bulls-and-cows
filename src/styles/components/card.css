@@ -1,0 +1,9 @@
+/* Game card */
+.card {
+  flex: 1;
+  margin: 96px 16px 0;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-card);
+}

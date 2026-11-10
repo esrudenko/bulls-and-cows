@@ -23,7 +23,7 @@ const recordsButton = createIconButton(trophyIconUrl, 'Records');
 
 const headerActions = createElement('div', {
   className: 'header__actions',
-  children: [newGameButton, recordsButton],
+  children: [recordsButton, newGameButton],
 });
 
 const logo = createElement('img', {
@@ -39,9 +39,9 @@ const header = createElement('header', {
 });
 
 //MAIN
-const main = createElement('main', { className: 'main', children: [] });
+const main = createElement('main', { className: 'card', children: [] });
 
-//FOOTER
-const footer = createElement('footer', { className: 'footer', children: [] });
+//APP
+const app = createElement('div', { className: 'app', children: [header, main] });
 
-document.body.append(header, main, footer);
+document.body.append(app);

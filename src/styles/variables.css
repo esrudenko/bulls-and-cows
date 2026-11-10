@@ -1,10 +1,14 @@
 :root {
   /* Colors */
-  --color-text: #2b2522;
+  --color-page: #f3e9e1;
+  --color-text: #303d36;
   --color-text-muted: #6b5d55;
-  --color-card: rgba(255, 249, 243, 0.88);
+  --color-card: rgba(255, 248, 241, 0.7);
   --color-surface: #fbf3ea;
   --color-border: #e5d6c8;
+  --color-border-strong: #b5a497;
+  --color-forest: #36574a;
+  --color-hover: #e5eee5;
   --color-accent: #3f8f3f;
   --color-accent-dark: #2f7432;
   --color-highlight: #dcebc9;
@@ -13,5 +17,5 @@
   --radius-card: 24px;
   --radius-button: 14px;
   --shadow-card: 0 8px 24px rgba(43, 37, 34, 0.12);
-  --shadow-button: 0 2px 4px rgba(43, 37, 34, 0.12);
+  --shadow-button: 0 1px 3px rgba(48, 61, 54, 0.08);
 }
