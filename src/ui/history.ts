@@ -1,0 +1,46 @@
+import { createElement } from './createElement';
+import { formatResult } from '../game/formatResult';
+import type { Guess } from '../game/gameTypes';
+
+type History = {
+  element: HTMLElement;
+  list: HTMLOListElement;
+};
+
+const createHistoryRow = (attempt: Guess, isLatest: boolean): HTMLLIElement => {
+  const guess = createElement('span', { className: 'history__guess', text: attempt.value });
+  const result = createElement('span', {
+    className: 'history__result',
+    text: formatResult(attempt.bulls, attempt.cows),
+  });
+
+  return createElement('li', {
+    className: isLatest ? 'history__row history__row--latest' : 'history__row',
+    children: [guess, result],
+  });
+};
+
+export const createHistory = (): History => {
+  const list = createElement('ol', { className: 'history__list' });
+
+  const element = createElement('section', {
+    className: 'history',
+    attributes: { 'aria-label': 'Guess history', 'aria-live': 'polite' },
+    children: [list],
+  });
+
+  return { element, list };
+};
+
+export const renderHistory = (history: History, attempts: readonly Guess[]): void => {
+  const rows = attempts.map((attempt, index) =>
+    createHistoryRow(attempt, index === attempts.length - 1),
+  );
+  const placeholder = createElement('li', {
+    className: 'history__placeholder',
+    text: 'Your guesses will appear here',
+  });
+
+  history.list.replaceChildren(...(rows.length > 0 ? rows : [placeholder]));
+  history.element.scrollTop = history.element.scrollHeight;
+};

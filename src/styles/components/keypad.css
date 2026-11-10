@@ -8,13 +8,13 @@
 .guess__cell {
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 56px;
+  width: 46px;
+  height: 48px;
   border: 1.5px solid var(--color-border-strong);
-  border-radius: var(--radius-button);
+  border-radius: 12px;
   background-color: var(--color-surface);
   box-shadow: var(--shadow-button);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
@@ -27,7 +27,7 @@
 .keypad {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 8px;
+  gap: 6px;
 }
 
 .keypad--base-2 {
@@ -44,14 +44,14 @@
 }
 
 .keypad__key {
-  height: 48px;
+  height: 38px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-button);
+  border-radius: 12px;
   background-color: var(--color-surface);
   box-shadow: var(--shadow-button);
   color: var(--color-text);
   font: inherit;
-  font-size: 1.375rem;
+  font-size: 1.1875rem;
   font-weight: 700;
   transition: background-color 0.2s ease;
 }
@@ -71,9 +71,8 @@
 }
 
 .keypad--base-16 .keypad__key {
-  height: 44px;
-  border-radius: 12px;
-  font-size: 1.125rem;
+  border-radius: 10px;
+  font-size: 1rem;
 }
 
 @media (max-width: 359px) {
@@ -82,7 +81,7 @@
   }
 
   .keypad--base-16 .keypad__key {
-    height: 38px;
+    height: 34px;
   }
 }
 
@@ -95,7 +94,7 @@
 
 .actions__delete,
 .actions__check {
-  height: 52px;
+  height: 44px;
   border-radius: 999px;
   font: inherit;
   transition: background-color 0.2s ease;
@@ -141,4 +140,19 @@
 .actions__check:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+@media (max-height: 600px) {
+  .guess__cell {
+    height: 42px;
+  }
+
+  .keypad__key {
+    height: 34px;
+  }
+
+  .actions__delete,
+  .actions__check {
+    height: 40px;
+  }
 }

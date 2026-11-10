@@ -1,20 +1,36 @@
-/* App container */
+/* App container: the card starts right under the cows (~25% of the height) */
 .app {
+  --app-height: 100dvh;
+
   display: flex;
   flex-direction: column;
   max-width: 420px;
-  min-height: 100dvh;
+  height: var(--app-height);
   margin: 0 auto;
-  padding-bottom: 80px;
   background: url('../../assets/images/main-background.webp') center / cover no-repeat;
+}
+
+/* Space between the header and the card, shrinks first when the screen is short */
+.app::before {
+  content: '';
+  order: 1;
+  flex: 0 1 calc(var(--app-height) * 0.25 - 72px);
+  min-height: 12px;
 }
 
 @media (min-width: 480px) {
   .app {
-    min-height: calc(100dvh - 48px);
+    --app-height: calc(100dvh - 48px);
+
     margin: 24px auto;
     border-radius: 32px;
     box-shadow: var(--shadow-card);
     overflow: hidden;
+  }
+}
+
+@media (max-height: 600px) {
+  .app {
+    padding-bottom: 8px;
   }
 }

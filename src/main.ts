@@ -4,14 +4,17 @@ import { createHeader } from './ui/header';
 import { createSettings, readSettings, setSettingsLocked } from './ui/settings';
 import { createGuessCells } from './ui/guess';
 import { createActions, createKeypad } from './ui/keypad';
+import { createHistory, renderHistory } from './ui/history';
 import { appendDigit, removeLastDigit } from './game/guessInput';
-import { createInitialState, startGame } from './game/gameState';
+import { createInitialState, startGame, submitGuess } from './game/gameState';
 import { formatTime } from './game/formatTime';
 
 const header = createHeader();
 const settings = createSettings();
 const actions = createActions();
+const history = createHistory();
 
+const hint = createElement('p', { className: 'play__hint' });
 const guessSlot = createElement('div');
 const keypadSlot = createElement('div');
 
@@ -22,6 +25,7 @@ let game = createInitialState();
 let input = '';
 let guessCells = createGuessCells(getLength());
 let keypad = createKeypad(getBase());
+let timerId: number | undefined;
 
 const isPlaying = (): boolean => game.status === 'playing';
 
@@ -39,22 +43,30 @@ const updateInputView = (): void => {
   actions.checkButton.disabled = !isPlaying() || input.length < getLength();
 };
 
+const setInput = (nextInput: string): void => {
+  input = nextInput;
+  hint.textContent = '';
+  updateInputView();
+};
+
 const updateTimer = (): void => {
   const startedAt = game.startedAt ?? Date.now();
-  settings.timeValue.textContent = formatTime(Date.now() - startedAt);
+  const endedAt = game.finishedAt ?? Date.now();
+  settings.timeValue.textContent = formatTime(endedAt - startedAt);
+};
+
+const stopTimer = (): void => {
+  window.clearInterval(timerId);
+  updateTimer();
 };
 
 const startRound = (): void => {
   game = startGame(game, Math.random, Date.now(), readSettings(settings));
   setSettingsLocked(settings, true);
+  renderHistory(history, game.attempts);
   setInput('');
   updateTimer();
-  window.setInterval(updateTimer, 250);
-};
-
-const setInput = (nextInput: string): void => {
-  input = nextInput;
-  updateInputView();
+  timerId = window.setInterval(updateTimer, 250);
 };
 
 const addDigit = (digit: string): void => {
@@ -63,6 +75,27 @@ const addDigit = (digit: string): void => {
 
 const deleteDigit = (): void => {
   setInput(removeLastDigit(input));
+};
+
+const checkGuess = (): void => {
+  if (!isPlaying() || input.length < getLength()) {
+    return;
+  }
+
+  const nextGame = submitGuess(game, input, Date.now());
+
+  if (nextGame === game) {
+    hint.textContent = `You already tried ${input}`;
+    return;
+  }
+
+  game = nextGame;
+  renderHistory(history, game.attempts);
+  setInput('');
+
+  if (game.status === 'won') {
+    stopTimer();
+  }
 };
 
 const renderGuessCells = (): void => {
@@ -99,6 +132,7 @@ keypadSlot.addEventListener('click', (event) => {
 });
 
 actions.deleteButton.addEventListener('click', deleteDigit);
+actions.checkButton.addEventListener('click', checkGuess);
 settings.startButton.addEventListener('click', startRound);
 
 document.addEventListener('keydown', (event) => {
@@ -112,6 +146,9 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Backspace') {
     event.preventDefault();
     deleteDigit();
+  } else if (event.key === 'Enter') {
+    event.preventDefault();
+    checkGuess();
   } else if (event.key.length === 1) {
     addDigit(event.key);
   }
@@ -119,14 +156,18 @@ document.addEventListener('keydown', (event) => {
 
 guessSlot.replaceChildren(guessCells.element);
 keypadSlot.replaceChildren(keypad.element);
+renderHistory(history, game.attempts);
 updateInputView();
 
 const play = createElement('div', {
   className: 'play',
-  children: [guessSlot, keypadSlot, actions.element],
+  children: [hint, guessSlot, keypadSlot, actions.element],
 });
 
-const main = createElement('main', { className: 'card', children: [settings.element, play] });
+const main = createElement('main', {
+  className: 'card',
+  children: [settings.element, history.element, play],
+});
 const app = createElement('div', { className: 'app', children: [header.element, main] });
 
 document.body.append(app);
