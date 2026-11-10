@@ -6,9 +6,11 @@ import { createGuessCells } from './ui/guess';
 import { createActions, createKeypad } from './ui/keypad';
 import { createHistory, renderHistory } from './ui/history';
 import { createWinDialog } from './ui/winDialog';
+import { createRecordsDialog } from './ui/recordsDialog';
 import { appendDigit, removeLastDigit } from './game/guessInput';
 import { createInitialState, startGame, submitGuess } from './game/gameState';
 import { formatTime } from './game/formatTime';
+import { pluralize } from './game/formatResult';
 import { addRecord } from './game/records';
 import { loadRecords, saveRecords } from './storage/recordsStorage';
 import type { GameRecord } from './game/gameTypes';
@@ -18,6 +20,7 @@ const settings = createSettings();
 const actions = createActions();
 const history = createHistory();
 const winDialog = createWinDialog();
+const recordsDialog = createRecordsDialog();
 
 const START_HINT = 'Press ▶ to start';
 const RECORDS_LIMIT = 10;
@@ -82,8 +85,10 @@ const stopTimer = (): void => {
 
 const getRoundTime = (): number => (game.finishedAt ?? 0) - (game.startedAt ?? 0);
 
-const hasSameSettings = (record: GameRecord): boolean =>
-  record.base === game.base && record.length === game.length;
+const isRecordFor =
+  (base: number, length: number) =>
+  (record: GameRecord): boolean =>
+    record.base === base && record.length === length;
 
 const saveResult = (): number | null => {
   const record: GameRecord = {
@@ -92,9 +97,10 @@ const saveResult = (): number | null => {
     base: game.base,
     length: game.length,
   };
+  const isSameTable = isRecordFor(game.base, game.length);
   const allRecords = loadRecords();
-  const otherTables = allRecords.filter((saved) => !hasSameSettings(saved));
-  const table = addRecord(allRecords.filter(hasSameSettings), record, RECORDS_LIMIT);
+  const otherTables = allRecords.filter((saved) => !isSameTable(saved));
+  const table = addRecord(allRecords.filter(isSameTable), record, RECORDS_LIMIT);
   const index = table.indexOf(record);
 
   saveRecords([...otherTables, ...table]);
@@ -109,6 +115,13 @@ const startRound = (): void => {
   setInput('');
   updateTimer();
   timerId = window.setInterval(updateTimer, 250);
+};
+
+const showRecords = (): void => {
+  const { base, length } = readSettings(settings);
+  const table = loadRecords().filter(isRecordFor(base, length));
+
+  recordsDialog.show(table, `${pluralize(length, 'digit')} · base ${base}`);
 };
 
 const newGame = (): void => {
@@ -192,6 +205,7 @@ actions.deleteButton.addEventListener('click', deleteDigit);
 actions.checkButton.addEventListener('click', checkGuess);
 settings.startButton.addEventListener('click', startRound);
 header.newGameButton.addEventListener('click', newGame);
+header.recordsButton.addEventListener('click', showRecords);
 winDialog.newGameButton.addEventListener('click', newGame);
 
 document.addEventListener('keydown', (event) => {
@@ -224,4 +238,4 @@ const main = createElement('main', {
 });
 const app = createElement('div', { className: 'app', children: [header.element, main] });
 
-document.body.append(app, winDialog.element);
+document.body.append(app, winDialog.element, recordsDialog.element);
