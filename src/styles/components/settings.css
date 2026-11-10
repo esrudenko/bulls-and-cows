@@ -150,6 +150,12 @@
     outline: none;
   }
 
+  .settings__select option:disabled {
+    background-color: transparent;
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
   .settings__select option::checkmark {
     display: none;
   }

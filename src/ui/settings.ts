@@ -1,5 +1,6 @@
 import { createElement } from './createElement';
 import { DIGITS } from '../core/constants';
+import { isValidSettings } from '../game/isValidSettings';
 import type { GameBase, GameLength } from '../game/gameTypes';
 import playIconUrl from '../assets/icons/play.svg';
 
@@ -29,6 +30,20 @@ const createOption = (value: number, text: string, isSelected: boolean): HTMLOpt
 
 const formatBaseLabel = (base: GameBase): string => `${base} (0–${DIGITS[base - 1]})`;
 
+const updateLengthOptions = (lengthSelect: HTMLSelectElement, base: number): void => {
+  const options = [...lengthSelect.options];
+
+  options.forEach((option) => {
+    option.disabled = !isValidSettings(base, Number(option.value));
+  });
+
+  const firstAllowedOption = options.find((option) => !option.disabled);
+
+  if (lengthSelect.selectedOptions[0]?.disabled && firstAllowedOption) {
+    lengthSelect.value = firstAllowedOption.value;
+  }
+};
+
 const createSelectField = (labelText: string, select: HTMLElement): HTMLElement => {
   const label = createElement('span', { className: 'settings__label', text: labelText });
 
@@ -46,6 +61,10 @@ export const createSettings = (): Settings => {
   const baseSelect = createElement('select', {
     className: 'settings__control settings__select',
     children: BASES.map((base) => createOption(base, formatBaseLabel(base), base === DEFAULT_BASE)),
+  });
+
+  baseSelect.addEventListener('change', () => {
+    updateLengthOptions(lengthSelect, Number(baseSelect.value));
   });
 
   const timeLabel = createElement('span', { className: 'settings__label', text: 'Time' });
