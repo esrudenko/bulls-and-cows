@@ -1,0 +1,17 @@
+:root {
+  /* Colors */
+  --color-text: #2b2522;
+  --color-text-muted: #6b5d55;
+  --color-card: rgba(255, 249, 243, 0.88);
+  --color-surface: #fbf3ea;
+  --color-border: #e5d6c8;
+  --color-accent: #3f8f3f;
+  --color-accent-dark: #2f7432;
+  --color-highlight: #dcebc9;
+
+  /* Shapes */
+  --radius-card: 24px;
+  --radius-button: 14px;
+  --shadow-card: 0 8px 24px rgba(43, 37, 34, 0.12);
+  --shadow-button: 0 2px 4px rgba(43, 37, 34, 0.12);
+}
