@@ -6,7 +6,10 @@ type ElementOptions = {
   children?: HTMLElement[];
 };
 
-export const createElement = (tagName: string, options: ElementOptions = {}): HTMLElement => {
+export const createElement = <TagName extends keyof HTMLElementTagNameMap>(
+  tagName: TagName,
+  options: ElementOptions = {},
+): HTMLElementTagNameMap[TagName] => {
   const element = document.createElement(tagName);
 
   if (options.className) {

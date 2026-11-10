@@ -5,11 +5,11 @@ import playIconUrl from '../assets/icons/play.svg';
 
 type Settings = {
   element: HTMLElement;
-  lengthSelect: HTMLElement;
-  baseSelect: HTMLElement;
-  timerBox: HTMLElement;
-  timeValue: HTMLElement;
-  startButton: HTMLElement;
+  lengthSelect: HTMLSelectElement;
+  baseSelect: HTMLSelectElement;
+  timerBox: HTMLDivElement;
+  timeValue: HTMLSpanElement;
+  startButton: HTMLButtonElement;
 };
 
 const LENGTHS: readonly GameLength[] = [2, 3, 4, 5, 6];
@@ -17,7 +17,7 @@ const BASES: readonly GameBase[] = [2, 8, 10, 16];
 const DEFAULT_LENGTH: GameLength = 4;
 const DEFAULT_BASE: GameBase = 10;
 
-const createOption = (value: number, text: string, isSelected: boolean): HTMLElement => {
+const createOption = (value: number, text: string, isSelected: boolean): HTMLOptionElement => {
   const attributes: Record<string, string> = { value: String(value) };
 
   if (isSelected) {

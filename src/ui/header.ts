@@ -5,11 +5,11 @@ import trophyIconUrl from '../assets/icons/trophy.svg';
 
 type Header = {
   element: HTMLElement;
-  newGameButton: HTMLElement;
-  recordsButton: HTMLElement;
+  newGameButton: HTMLButtonElement;
+  recordsButton: HTMLButtonElement;
 };
 
-const createIconButton = (iconUrl: string, label: string): HTMLElement => {
+const createIconButton = (iconUrl: string, label: string): HTMLButtonElement => {
   const icon = createElement('img', {
     className: 'header__icon',
     attributes: { src: iconUrl, alt: '' },
