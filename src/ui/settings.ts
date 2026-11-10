@@ -4,7 +4,7 @@ import { isValidSettings } from '../game/isValidSettings';
 import type { GameBase, GameLength } from '../game/gameTypes';
 import playIconUrl from '../assets/icons/play.svg';
 
-type Settings = {
+export type Settings = {
   element: HTMLElement;
   lengthSelect: HTMLSelectElement;
   baseSelect: HTMLSelectElement;
@@ -17,6 +17,19 @@ const LENGTHS: readonly GameLength[] = [2, 3, 4, 5, 6];
 const BASES: readonly GameBase[] = [2, 8, 10, 16];
 const DEFAULT_LENGTH: GameLength = 4;
 const DEFAULT_BASE: GameBase = 10;
+
+export const readSettings = (settings: Settings): { base: GameBase; length: GameLength } => ({
+  base: BASES.find((base) => base === Number(settings.baseSelect.value)) ?? DEFAULT_BASE,
+  length:
+    LENGTHS.find((length) => length === Number(settings.lengthSelect.value)) ?? DEFAULT_LENGTH,
+});
+
+export const setSettingsLocked = (settings: Settings, isLocked: boolean): void => {
+  settings.lengthSelect.disabled = isLocked;
+  settings.baseSelect.disabled = isLocked;
+  settings.startButton.disabled = isLocked;
+  settings.timerBox.classList.toggle('settings__timer--active', isLocked);
+};
 
 const createOption = (value: number, text: string, isSelected: boolean): HTMLOptionElement => {
   const attributes: Record<string, string> = { value: String(value) };

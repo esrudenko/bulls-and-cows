@@ -1,10 +1,12 @@
 import './styles/main.css';
 import { createElement } from './ui/createElement';
 import { createHeader } from './ui/header';
-import { createSettings } from './ui/settings';
+import { createSettings, readSettings, setSettingsLocked } from './ui/settings';
 import { createGuessCells } from './ui/guess';
 import { createActions, createKeypad } from './ui/keypad';
 import { appendDigit, removeLastDigit } from './game/guessInput';
+import { createInitialState, startGame } from './game/gameState';
+import { formatTime } from './game/formatTime';
 
 const header = createHeader();
 const settings = createSettings();
@@ -16,21 +18,38 @@ const keypadSlot = createElement('div');
 const getLength = (): number => Number(settings.lengthSelect.value);
 const getBase = (): number => Number(settings.baseSelect.value);
 
+let game = createInitialState();
 let input = '';
 let guessCells = createGuessCells(getLength());
 let keypad = createKeypad(getBase());
 
+const isPlaying = (): boolean => game.status === 'playing';
+
 const updateInputView = (): void => {
   guessCells.cells.forEach((cell, index) => {
     cell.textContent = input[index] ?? '';
-    cell.classList.toggle('guess__cell--active', index === input.length);
+    cell.classList.toggle('guess__cell--active', isPlaying() && index === input.length);
   });
 
   keypad.digitButtons.forEach((button) => {
-    button.disabled = input.includes(button.dataset.digit ?? '');
+    button.disabled = !isPlaying() || input.includes(button.dataset.digit ?? '');
   });
 
-  actions.deleteButton.disabled = input === '';
+  actions.deleteButton.disabled = !isPlaying() || input === '';
+  actions.checkButton.disabled = !isPlaying() || input.length < getLength();
+};
+
+const updateTimer = (): void => {
+  const startedAt = game.startedAt ?? Date.now();
+  settings.timeValue.textContent = formatTime(Date.now() - startedAt);
+};
+
+const startRound = (): void => {
+  game = startGame(game, Math.random, Date.now(), readSettings(settings));
+  setSettingsLocked(settings, true);
+  setInput('');
+  updateTimer();
+  window.setInterval(updateTimer, 250);
 };
 
 const setInput = (nextInput: string): void => {
@@ -80,12 +99,13 @@ keypadSlot.addEventListener('click', (event) => {
 });
 
 actions.deleteButton.addEventListener('click', deleteDigit);
+settings.startButton.addEventListener('click', startRound);
 
 document.addEventListener('keydown', (event) => {
   const isTypingInSelect = event.target instanceof HTMLSelectElement;
   const hasModifier = event.ctrlKey || event.metaKey || event.altKey;
 
-  if (isTypingInSelect || hasModifier) {
+  if (!isPlaying() || isTypingInSelect || hasModifier) {
     return;
   }
 
