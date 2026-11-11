@@ -1,0 +1,19 @@
+/* Game card: as tall as its content */
+.card {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 16px;
+  padding: 18px 16px;
+  border-radius: var(--radius-card);
+  background: linear-gradient(var(--color-card-top), var(--color-card) 160px);
+  box-shadow: var(--shadow-card);
+}
+
+/* Play area: guess cells, keypad and actions */
+.play {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
